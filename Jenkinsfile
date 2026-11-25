@@ -2,7 +2,9 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        DOCKER_IMAGE = "keyvan1368/jenkins:${BUILD_NUMBER}"
+        TELEGRAM_BOT_TOKEN     = credentials('telegram-bot-token')
+        TELEGRAM_CHAT_ID       = credentials('telegram-chat-id')
+        DOCKER_IMAGE           = "keyvan1368/jenkins:${BUILD_NUMBER}"
     }
     stages {
         stage('Checkout') {
@@ -32,9 +34,14 @@ pipeline {
     }
     post {
         success {
-            mail to: 'ksalehi56@yahoo.com',
-                 subject: "Success: ${currentBuild.fullDisplayName}",
-                 body: "The pipeline succeeded! Image pushed: ${DOCKER_IMAGE}\n\nBuild URL: ${BUILD_URL}"
+            sh '''
+                curl -s -X POST "https://telegram.org{TELEGRAM_BOT_TOKEN}/sendMessage" \
+                    -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                    --data-urlencode "text=✅ Jenkins Build Succeeded!
+Job: ${JOB_NAME} #${BUILD_NUMBER}
+Image pushed: ${DOCKER_IMAGE}
+Build URL: ${BUILD_URL}"
+            '''
         }
         always {
             sh 'docker logout || true'

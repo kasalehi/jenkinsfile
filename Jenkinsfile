@@ -1,4 +1,4 @@
-## lets create jenkinsfile for our projcet 
+
 
 pipeline {
     agent any

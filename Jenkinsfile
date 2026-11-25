@@ -1,3 +1,5 @@
+groovy
+
 pipeline {
     agent any
     environment {
@@ -31,8 +33,17 @@ pipeline {
         }
     }
     post {
+        success {
+            mail to: 'your-email@example.com',
+                 subject: "Success: ${currentBuild.fullDisplayName}",
+                 body: "The pipeline succeeded! Image pushed: ${DOCKER_IMAGE}\n\nBuild URL: ${BUILD_URL}"
+        }
         always {
             sh 'docker logout || true'
         }
     }
 }
+
+Use code with caution.
+
+Copy code text to clipboard.

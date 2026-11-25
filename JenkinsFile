@@ -7,6 +7,12 @@ pipeline {
         DoCKER_IMAGE = 'keyvan1368/jenkins:$BUILD_NUMBER'
     }
     stages {
+         stage('Checkout') {
+            steps {
+                echo 'Checking out code...'
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building...'

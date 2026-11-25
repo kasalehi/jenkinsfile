@@ -34,7 +34,7 @@ pipeline {
     }
     post {
         success {
-            mail to: 'your-email@example.com',
+            mail to: 'ksalehi56@yahoo.com',
                  subject: "Success: ${currentBuild.fullDisplayName}",
                  body: "The pipeline succeeded! Image pushed: ${DOCKER_IMAGE}\n\nBuild URL: ${BUILD_URL}"
         }

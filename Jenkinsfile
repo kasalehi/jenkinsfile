@@ -1,13 +1,11 @@
-
-
 pipeline {
     agent any
     environment {
-        DOCKER_hub_CREDENTIALS = credentials('docker-hub-credentials')
-        DoCKER_IMAGE = 'keyvan1368/jenkins:$BUILD_NUMBER'
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
+        DOCKER_IMAGE = "keyvan1368/jenkins:${BUILD_NUMBER}"
     }
     stages {
-         stage('Checkout') {
+        stage('Checkout') {
             steps {
                 echo 'Checking out code...'
                 checkout scm
@@ -16,20 +14,25 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'docker build -t $DOCKER_IMAGE .'
+                bat 'docker build -t %DOCKER_IMAGE% .'
             }
         }
-        stage('logindockerhub') {
+        stage('Login to Docker Hub') {
             steps {
                 echo 'Logging into Docker Hub...'
-                sh 'docker login -u $DOCKER_hub_CREDENTIALS_USR -p $DOCKER_hub_CREDENTIALS_PSW'
+                bat 'echo %DOCKER_HUB_CREDENTIALS_PSW%| docker login -u %DOCKER_HUB_CREDENTIALS_USR% --password-stdin'
             }
         }
-        stage('Pushdockerhub') {
+        stage('Push to Docker Hub') {
             steps {
                 echo 'Pushing to Docker Hub...'
-                sh 'docker push $DOCKER_IMAGE'
+                bat 'docker push %DOCKER_IMAGE%'
             }
+        }
+    }
+    post {
+        always {
+            bat 'docker logout'
         }
     }
 }

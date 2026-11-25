@@ -14,25 +14,25 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                bat 'docker build -t %DOCKER_IMAGE% .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
         stage('Login to Docker Hub') {
             steps {
                 echo 'Logging into Docker Hub...'
-                bat 'echo %DOCKER_HUB_CREDENTIALS_PSW%| docker login -u %DOCKER_HUB_CREDENTIALS_USR% --password-stdin'
+                sh 'echo "$DOCKER_HUB_CREDENTIALS_PSW" | docker login -u "$DOCKER_HUB_CREDENTIALS_USR" --password-stdin'
             }
         }
         stage('Push to Docker Hub') {
             steps {
                 echo 'Pushing to Docker Hub...'
-                bat 'docker push %DOCKER_IMAGE%'
+                sh 'docker push $DOCKER_IMAGE'
             }
         }
     }
     post {
         always {
-            bat 'docker logout'
+            sh 'docker logout || true'
         }
     }
 }

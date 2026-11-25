@@ -1,5 +1,3 @@
-groovy
-
 pipeline {
     agent any
     environment {
@@ -43,7 +41,3 @@ pipeline {
         }
     }
 }
-
-Use code with caution.
-
-Copy code text to clipboard.

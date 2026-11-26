@@ -32,7 +32,7 @@ pipeline {
             }
         }
     }
-       post {
+     post {
         success {
             sh '''
                 curl -s -X POST "https://telegram.org{TELEGRAM_BOT_TOKEN}/sendMessage" \
@@ -47,5 +47,6 @@ Build URL: ${BUILD_URL}"
             sh 'docker logout || true'
         }
     }
+
 
 }

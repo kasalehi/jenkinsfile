@@ -32,10 +32,11 @@ pipeline {
             }
         }
     }
-     post {
+    post {
         success {
             sh '''
-                curl -s -X POST "https://telegram.org{TELEGRAM_BOT_TOKEN}/sendMessage" \
+                TG_HOST="api.telegram.org"
+                curl -s -X POST "https://${TG_HOST}/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
                     -d "chat_id=${TELEGRAM_CHAT_ID}" \
                     --data-urlencode "text=✅ Jenkins Build Succeeded!
 Job: ${JOB_NAME} #${BUILD_NUMBER}
@@ -47,6 +48,4 @@ Build URL: ${BUILD_URL}"
             sh 'docker logout || true'
         }
     }
-
-
 }
